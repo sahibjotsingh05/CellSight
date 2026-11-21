@@ -1,0 +1,21 @@
+digraph rules {
+  graph [rankdir=TB, bgcolor="#F6F8FC", pad="0.3", nodesep="0.45", ranksep="0.55", fontname="Helvetica", fontsize=21, fontcolor="#142033", label="Explainable alerts - evidence, persistence, and recovery", labelloc=t];
+  node [shape=box, style="rounded,filled", fillcolor="white", color="#CBD5E1", penwidth=1.4, fontname="Helvetica", fontsize=13, fontcolor="#142033", margin="0.18,0.13"];
+  edge [color="#718096", arrowsize=0.8, fontname="Helvetica", fontsize=11, fontcolor="#475569"];
+  input [label="ONE ORDERED TELEMETRY EVENT\nCSV frame or explicitly labelled injected reading", fillcolor="#E9F1FD"];
+  quality [label="CHECK WHAT IS ACTUALLY KNOWN\nParsed values + per-field quality + provenance\nMissing is unknown; never replace with zero"];
+  immediate [label="IMMEDIATE LIMIT / QUALITY RULES\nExample: temperature >=60 C -> critical\nMissing sensor -> explicit quality event", fillcolor="#FFF0E9", color="#CC8866"];
+  sustained [label="CSV HISTORY RULES\n40/55 C and voltage limits: 2 qualifying frames\n6-sample elapsed-time slope: 3 qualifying windows\nSynthetic points do not establish a sustained trend", fillcolor="#D6F2E9", color="#239B8E"];
+  incident [label="ONE TCU DECISION WITH MEASURED EVIDENCE\nValue / rule / threshold / time / quality / injected flag\nUnknown data does not clear an existing hazard", fillcolor="#D6F2E9", color="#239B8E", penwidth=2];
+  display [label="CITY DRAWER + DRIVER STATUS\nSame versioned decision, appropriate detail for each user\nAcknowledged means seen; it does not mean recovered", fillcolor="#E9F1FD"];
+  clear [label="VALID RECOVERY\n3 qualifying CSV frames with recovery margin\n2 C / 0.03 V; rate below 1.0 C per minute", shape=note, fillcolor="#F0ECFC", color="#A38CC4"];
+  basis [label="Why these numbers?\nReference facts + normal-data measurements + explicit project choices\nSee docs/decisions.md; no manufacturer-approved bus profile is supplied.", shape=note, fillcolor="#FFF7E6", color="#D6AA53"];
+  input -> quality;
+  quality -> immediate;
+  quality -> sustained [label="CSV only"];
+  immediate -> incident;
+  sustained -> incident;
+  incident -> display;
+  clear -> incident [style=dashed, label="clear only on evidence"];
+  display -> basis [style=invis];
+}

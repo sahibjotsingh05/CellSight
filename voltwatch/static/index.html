@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="VoltWatch fleet monitoring" />
+    <title>Fleet overview · VoltWatch</title>
+    <script>
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem("voltwatch-theme") ||
+          (matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
+    <link rel="stylesheet" href="/static/vendor/maplibre-gl.css" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/theme.css" />
+    <script defer src="/static/vendor/maplibre-gl.js"></script>
+    <script defer src="/static/theme-runtime.js"></script>
+    <script defer src="/static/fleet-map.js"></script>
+    <script type="module" src="/static/glass-runtime.js"></script>
+    <script defer src="/static/vendor/chart.umd.js"></script>
+    <script defer src="/static/charts.js"></script>
+    <script defer src="/static/app.js"></script>
+  </head>
+  <body data-page="city">
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="app-shell">
+      <nav class="rail" aria-label="Main navigation">
+        <div class="rail-brand" title="VoltWatch">VW<span class="sr-only"> VoltWatch</span></div>
+        <a class="nav-link active" href="/" aria-current="page" title="Fleet overview"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg><span class="sr-only">Fleet overview</span></a>
+        <a class="nav-link" data-nav="utility" href="#" title="Simulation controls"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg><span class="sr-only">Simulation controls</span></a>
+      </nav>
+      <main id="main" class="workspace">
+        <header class="workspace-header">
+          <h1>Fleet Overview</h1>
+          <div class="header-actions">
+            <span id="fleet-status" class="pill unknown">Connecting</span
+            ><!-- Freeze updates is disabled for now; re-enable with its listener in app.js.
+            <button id="freeze" aria-pressed="false">Freeze updates</button>
+            --><button id="theme-toggle" class="theme-toggle"></button><!-- Glass surfaces are always on for now.
+            <button id="effects-toggle" aria-pressed="false">Reduce transparency</button> -->
+          </div>
+        </header>
+        <div id="frozen-notice" class="freeze-notice" role="status" hidden>
+          Updates frozen. Vehicle data and positions are not live.
+        </div>
+        <div class="city-layout">
+          <aside class="fleet" aria-label="Fleet list">
+            <div class="fleet-head">
+              <div>
+                <h2>Vehicles</h2>
+              </div>
+              <span id="fleet-count" class="count">—</span>
+            </div>
+            <label class="search-label" for="fleet-search"
+              >Search vehicles</label
+            ><input
+              id="fleet-search"
+              type="search"
+              placeholder="Search bus ID or route"
+            />
+            <p id="fleet-summary" class="fleet-summary"></p>
+            <div id="fleet-list">
+              <div class="empty">Waiting for fleet data…</div>
+            </div>
+          </aside>
+          <section class="map-wrap" aria-label="Edmonton vehicle map">
+            <div id="map" class="map"></div>
+            <div class="map-modes" role="group" aria-label="Map view"><button data-map-mode="streets" aria-pressed="false">Streets</button><button data-map-mode="satellite" aria-pressed="true">Satellite</button></div>
+            <div id="map-note" class="map-note" role="status"><span id="map-message">Loading map tiles…</span> <button id="map-retry" hidden>Retry map</button></div>
+            <div id="fleet-note" class="map-note fleet-note" role="status" hidden></div>
+            <section
+              id="drawer"
+              class="drawer"
+              data-glass
+              hidden
+              aria-label="Vehicle details"
+            >
+              <div class="drawer-head">
+                <div>
+                  <div class="eyebrow">Vehicle detail</div>
+                  <h2 id="drawer-name">Vehicle</h2>
+                  <p id="drawer-route" class="drawer-route"></p><span id="drawer-status"></span>
+                </div>
+                <button
+                  class="close"
+                  id="close-drawer"
+                  aria-label="Close vehicle details"
+                >
+                  ×
+                </button>
+              </div>
+              <div id="drawer-body" class="drawer-body"></div>
+            </section>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

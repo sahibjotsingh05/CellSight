@@ -1,0 +1,20 @@
+digraph architecture {
+  graph [rankdir=TB, bgcolor="#F6F8FC", pad="0.3", nodesep="0.5", ranksep="0.6", fontname="Helvetica", fontsize=21, fontcolor="#142033", label="VoltWatch - one utility, separate buses, two kinds of display", labelloc=t];
+  node [shape=box, style="rounded,filled", fillcolor="white", color="#CBD5E1", penwidth=1.4, fontname="Helvetica", fontsize=13, fontcolor="#142033", margin="0.18,0.13"];
+  edge [color="#718096", arrowsize=0.8, fontname="Helvetica", fontsize=11, fontcolor="#475569"];
+  files [label="ORIGINAL CSV FILES\nRead only; never edited", shape=note, fillcolor="#E9F1FD"];
+  utility [label="UTILITY SERVER / PARENT - :8000\nDefault: same Normal CSV for every bus\nPer-bus upload / live replacement / timed loop\nTemporary reading injection + bus-port registry\nStarts and stops its bus and city children", fillcolor="#D6F2E9", color="#239B8E", penwidth=2];
+  buses [label="ONE TCU SERVER PER BUS - :8101 onward\nConsume ordered events; detect and remember alerts\nGenerate and report simulated Edmonton GPS\nPublish position, vehicle state, and battery snapshot", fillcolor="#D6F2E9", color="#239B8E"];
+  city [label="CITY SERVER - :8200\nDiscover bus ports; collect their positions/status\nNo second detector; preserve version and freshness", fillcolor="#E1E9F9", color="#5F79AD"];
+  driver [label="DRIVER BROWSER - served by its bus\nPriority status / one action / charge / data availability\nExpand only when parked or explicit demo override", fillcolor="#E9F1FD"];
+  map [label="CITY BROWSER\nGeographic Edmonton map with received bus markers\nClick marker -> right-side live telemetry drawer\n12 modules / trends / alert evidence / source age", fillcolor="#E9F1FD"];
+  note [label="Solid arrows show data delivered to the next component.\nDriver pages are browser views, not extra server processes.\nOne bus failure leaves the others running; utility death ends all children.\nGPS is simulated because the CSVs contain no location fields.", shape=note, fillcolor="#FFF7E6", color="#D6AA53"];
+  files -> utility [label="read / validate"];
+  utility -> buses [label="HTTP: timed CSV frames + labelled injection events"];
+  buses -> city [label="HTTP: position + battery decisions"];
+  buses -> driver [label="same bus snapshot"];
+  city -> utility [style=dashed, label="GET registry", constraint=false];
+  city -> map [label="same-origin fleet / detail API"];
+  map -> note [style=invis];
+  driver -> note [style=invis];
+}

@@ -1,0 +1,21 @@
+digraph playback {
+  graph [rankdir=TB, bgcolor="#F6F8FC", pad="0.3", nodesep="0.5", ranksep="0.5", fontname="Helvetica", fontsize=21, fontcolor="#142033", label="Each bus: timestamp timing, temporary injection, endless loop", labelloc=t];
+  node [shape=box, style="rounded,filled", fillcolor="white", color="#CBD5E1", penwidth=1.4, fontname="Helvetica", fontsize=13, fontcolor="#142033", margin="0.18,0.13"];
+  edge [color="#718096", arrowsize=0.8, fontname="Helvetica", fontsize=11, fontcolor="#475569"];
+  normal [label="CSV FRAME 0 - source 12:00:00\n12 module readings released together", fillcolor="#D6F2E9", color="#239B8E"];
+  button [label="UTILITY BUTTON\nExample: inject M07 = 65 C\nat simulation time 12:00:04", shape=note, fillcolor="#FFF7E6", color="#D6AA53"];
+  injected [label="EXTRA IN-MEMORY READING EVENT\nOnly M07 temperature is updated; labelled INJECTED\nImmediate 60 C rule fires; other modules stay intact", fillcolor="#FFF0E9", color="#CC8866"];
+  next [label="CSV FRAME 1 - source 12:00:10\nOriginal next frame, original due time\nInjection did not consume or delay it", fillcolor="#D6F2E9", color="#239B8E"];
+  end [label="CONTINUE SOURCE TIMESTAMP GAPS\n... last supplied frame at 12:05:50"];
+  loop [label="LOOP BOUNDARY\nWait median positive interval: 10 s for these files\nNew run ID; reset active history / overrides\nKeep emitted events for delivery; return to frame 0", fillcolor="#E1E9F9", color="#5F79AD"];
+  change [label="LIVE CSV REPLACEMENT\nValidate, then atomically switch immediately\nRestart only its stream; keep processes/GPS alive\nBad upload leaves old stream unchanged", shape=note, fillcolor="#F0ECFC", color="#A38CC4"];
+  note [label="Example at default 1x speed. All files, including uploads, loop.\nNo positive interval? A one-frame file waits 1 s at the boundary.\nOriginal CSV bytes and parsed frames are unchanged by injection.\nOnly CSV frames enter sustained-rate/frozen/persistence windows.", shape=note, fillcolor="#E9F1FD"];
+  normal -> next [label="10 seconds at 1x"];
+  button -> injected [label="one POST, one event"];
+  normal -> injected [style=dashed, label="optional event between frames"];
+  injected -> next [style=dashed, label="CSV schedule unchanged"];
+  next -> end -> loop;
+  loop -> normal [label="repeat until stopped"];
+  change -> normal [style=dashed, label="fresh per-bus run", constraint=false];
+  loop -> note [style=invis];
+}

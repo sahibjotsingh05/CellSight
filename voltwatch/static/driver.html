@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="data:," />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="VoltWatch driver display" />
+  <title>Driver display · VoltWatch</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/theme.css" />
+  <link rel="stylesheet" href="/static/driver-page.css" />
+  <script defer src="/static/theme-runtime.js"></script>
+  <script defer src="/static/vendor/chart.umd.js"></script>
+  <script defer src="/static/charts.js"></script>
+  <script defer src="/static/driver-runtime.js"></script>
+  <script type="module" src="/static/glass-runtime.js"></script>
+</head>
+<body data-page="driver">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="driver-header"><div class="brand"><i></i>VoltWatch <span>Driver display</span></div><div class="header-actions"><button id="theme-toggle" class="theme-toggle" aria-label="Switch color theme"></button><!-- Glass surfaces are always on for now. <button id="effects-toggle" aria-pressed="false">Reduce transparency</button> --></div></header>
+  <main id="main" class="driver-main" tabindex="-1">
+    <p id="driver-announcement" class="sr-only" role="alert" aria-atomic="true"></p>
+    <div class="vehicle-heading"><div><div class="eyebrow">Driver display</div><h1 id="driver-bus">Connecting to vehicle</h1></div><div id="driver-mode" class="vehicle-mode">Vehicle state unavailable</div></div>
+    <div class="primary-grid">
+      <section id="status-panel" class="surface status-panel unknown" aria-labelledby="driver-title"><div id="driver-status" class="condition-label">CONNECTING</div><h2 id="driver-title">Waiting for data</h2><p id="driver-message" class="driver-message">Connecting to the vehicle battery monitor.</p><p id="driver-affected" class="affected"></p></section>
+      <section class="surface charge-panel" data-glass><div class="charge-inner"><div class="eyebrow">Charge · module estimate</div><div id="driver-charge" class="charge-value">—</div><div id="driver-coverage" class="charge-note">Coverage unavailable</div><div class="charge-bottom"><span>Data quality</span><strong id="driver-quality">Unknown</strong></div></div></section>
+    </div>
+    <section class="surface access-panel" data-glass><div class="access-inner"><div class="access-copy"><h2>Battery diagnostics</h2><p id="gate-note">Diagnostics available when parked or in diagnostic demo mode.</p></div><button id="expand" disabled aria-expanded="false" aria-controls="expanded">View diagnostics</button></div></section>
+    <section id="expanded" class="surface diagnostics" hidden aria-labelledby="diagnostics-title"><header><div><div class="eyebrow">Detailed view</div><h2 id="diagnostics-title">Battery diagnostics</h2></div><button id="collapse">Close diagnostics</button></header><div id="driver-detail"></div></section>
+  </main>
+</body>
+</html>

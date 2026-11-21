@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="VoltWatch playback controls" />
+    <title>Playback controls · VoltWatch</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/theme.css" />
+    <script defer src="/static/theme-runtime.js"></script>
+    <script type="module" src="/static/glass-runtime.js"></script>
+    <script defer src="/static/app.js"></script>
+  </head>
+  <body data-page="utility">
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="app-shell">
+      <nav class="rail" aria-label="Main navigation">
+        <div class="rail-brand" title="VoltWatch">VW<span class="sr-only"> VoltWatch</span></div>
+        <a class="nav-link" data-nav="city" href="#" title="Fleet overview"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg><span class="sr-only">Fleet overview</span></a>
+        <a class="nav-link active" href="/" aria-current="page" title="Simulation controls"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></svg><span class="sr-only">Simulation controls</span></a>
+      </nav>
+      <main id="main" class="workspace">
+        <header class="workspace-header">
+          <h1>Simulation Controls</h1>
+          <div class="header-actions">
+            <span id="utility-status" class="pill unknown">Connecting</span
+            ><button id="theme-toggle" class="theme-toggle" aria-label="Switch color theme"></button><!-- Glass surfaces are always on for now.
+            <button id="effects-toggle" aria-pressed="false">Reduce transparency</button> -->
+          </div>
+        </header>
+        <div id="utility-notice" role="status"></div>
+        <div class="utility-layout">
+          <aside class="utility-list" data-glass>
+            <div class="fleet-head">
+              <div>
+                <h2>Vehicles</h2>
+                <p>Select a vehicle to configure</p>
+              </div>
+              <span id="utility-count" class="count">—</span>
+            </div>
+            <div id="utility-buses">
+              <div class="empty">Loading vehicles…</div>
+            </div>
+          </aside>
+          <section
+            id="utility-grid"
+            class="utility-grid"
+            tabindex="-1"
+            aria-label="Selected vehicle controls"
+          >
+            <div class="empty">Loading controls…</div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
