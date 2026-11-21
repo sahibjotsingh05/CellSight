@@ -10,7 +10,7 @@ Implemented prototype, November 21, 2026. Read the [decision table](decisions.md
 
 | Server | Owns | Browser view |
 | --- | --- | --- |
-| Utility, :8000 | CSVs, per-bus timing, temporary injected readings, bus-port registry, child processes | Per-bus file assignment/upload, playback controls, injection buttons |
+| Utility, :8000 | CSVs, per-bus timing, temporary injected readings, bus-port registry, child processes | CSV upload, per-bus assignment, fault scenarios and parked toggle |
 | Each bus, :8101 onward | Battery detection/history and that bus's position | Its driver's compact display and expanded diagnostics |
 | City, :8200 | Bus discovery, status collection, map and selected-bus detail | Geographic Edmonton map; clicking a bus opens a live right-side drawer |
 
@@ -20,15 +20,14 @@ The city drawer keeps updating the selected bus's twelve module readings, charge
 
 ## CSV playback and temporary events
 
-![Timestamp playback, looping, and injection](diagrams/playback.png)
+![Fixed-paced playback, looping, and injection](diagrams/playback.png)
 
-At default startup, buses receive Sahibjot’s sustained demo CSVs in order: Normal operations, Low Voltage, Multiple module heating, Thermal rise and Sensor failure; larger fleets repeat that assignment order. Each bus has an independent cursor. Supplying `--csv` starts every bus with that specified file. The utility can select a built-in file or upload a different CSV for each bus while everything remains running. After validation, atomically switch only that bus to the new file's beginning immediately; never wait through the old file's next timestamp gap. A bad upload leaves its current stream intact.
+At default startup, buses receive sustained `configs/CONFIG - ...csv` files in order: Normal operations, Low Voltage, Multiple module heating, Thermal rise and Sensor failure; larger fleets repeat that order. Each bus has an independent cursor. Supplying `--csv` starts every bus with that specified file. Upload a CSV to the utility, then select a bus and assign that file. Validated uploads are saved in `uploads/`; an unusable file is rejected. Assignment switches the selected bus to the beginning without restarting processes.
 
-Rows sharing a timestamp form one twelve-module frame. At default 1× speed, timestamp gaps determine release timing: a ten-second CSV gap takes ten seconds. Files loop indefinitely, including uploads. At the boundary, wait the median positive interval, start a new run ID, and clear previous-run history/acknowledgments; the source timestamp visibly returns to the file's start. A one-frame file uses a one-second boundary delay. GPS continues independently. Optional faster demo speeds must be labelled.
+Rows sharing a source timestamp form a twelve-module frame. The running app releases one frame per second at the default speed, regardless of gaps in the source timestamps. `--speed` changes the initial rate. Source timestamps remain available and are used for temperature-rise calculations. At file wrap the source cursor returns to the beginning while the run, alerts and elapsed display continue; trend windows are cleared at the boundary. This fixed pacing differs from replaying the original timestamp intervals. GPS continues independently.
 
-An injection button inserts one additional **in-memory reading event** for a selected bus/module. It neither edits a CSV nor consumes its next row. The next scheduled CSV frame still arrives on time. A partial event updates only its named fields; the other eleven modules must not appear missing. A bounded delivery journal retains already-emitted events across loop boundaries, with increasing sequence numbers and run-start markers. A slow bus catches up in order; exceeding retention produces an explicit gap, never silent completeness.
+The utility's **Simulate faults** buttons assign sustained CONFIG files. The backend also supports temporary in-memory injection events; the current utility does not expose per-module injection controls. A bounded delivery journal retains emitted events, with increasing sequence numbers. If a slow consumer falls beyond retention, a gap is reported instead of silently treating the stream as complete.
 
-Start with `Inject critical temperature` (65 °C) and `Inject missing sensor`. Both exercise normal immediate detection/quality rules. A single injected point cannot establish a sustained trend: rate/frozen/persistence windows use CSV frames. Existing alerts recover under the documented rules, not because the button was released. Reset, reassignment, and loop wrap discard queued injections from the old run.
 
 ## Driver attention
 

@@ -24,7 +24,7 @@
 <title>utility</title>
 <path fill="#d6f2e9" stroke="#239b8e" stroke-width="2" d="M384.92,-623.82C384.92,-623.82 105.5,-623.82 105.5,-623.82 99.5,-623.82 93.5,-617.82 93.5,-611.82 93.5,-611.82 93.5,-549.6 93.5,-549.6 93.5,-543.6 99.5,-537.6 105.5,-537.6 105.5,-537.6 384.92,-537.6 384.92,-537.6 390.92,-537.6 396.92,-543.6 396.92,-549.6 396.92,-549.6 396.92,-611.82 396.92,-611.82 396.92,-617.82 390.92,-623.82 384.92,-623.82"/>
 <text xml:space="preserve" text-anchor="middle" x="245.21" y="-602.11" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#142033">UTILITY SERVER / PARENT &#45; :8000</text>
-<text xml:space="preserve" text-anchor="middle" x="245.21" y="-588.61" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#142033">Default: same Normal CSV for every bus</text>
+<text xml:space="preserve" text-anchor="middle" x="245.21" y="-588.61" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#142033">Default: five sustained CONFIG scenarios</text>
 <text xml:space="preserve" text-anchor="middle" x="245.21" y="-575.11" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#142033">Per&#45;bus upload / live replacement / timed loop</text>
 <text xml:space="preserve" text-anchor="middle" x="245.21" y="-561.61" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#142033">Temporary reading injection + bus&#45;port registry</text>
 <text xml:space="preserve" text-anchor="middle" x="245.21" y="-548.11" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#142033">Starts and stops its bus and city children</text>

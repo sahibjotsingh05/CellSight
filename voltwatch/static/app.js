@@ -698,7 +698,7 @@ async function utility() {
       <ul class="file-list">${sorted()
         .map(
           (s) =>
-            `<li><span class="file-name">${esc(s.name)}</span><span class="tag">${esc(SOURCE_LABEL[s.source] || "File")}</span><small>${esc(s.report?.frame_count ?? "—")} rows</small></li>`,
+            `<li><details><summary><span class="file-name">${esc(s.name)}</span><span class="tag">${esc(SOURCE_LABEL[s.source] || "File")}</span><small>${esc(s.report?.frame_count ?? "—")} frames</small></summary><div class="file-report"><p>${esc(s.report?.row_count ?? "—")} rows read · ${esc(s.report?.frame_count ?? "—")} usable ${s.report?.frame_count === 1 ? "frame" : "frames"} · ${esc(s.report?.missing_slots ?? "—")} missing slots</p>${s.report?.issues?.length ? s.report.issues.map(issue => `<p>${esc(issue)}</p>`).join("") : "<p>No import issues reported.</p>"}</div></details></li>`,
         )
         .join("")}</ul>
     </section>`;
@@ -772,7 +772,7 @@ async function utility() {
               form.append("file", file);
               const uploaded = await api("/api/scenarios", { method: "POST", body: form });
               scenarios = (await api("/api/scenarios")).scenarios || scenarios;
-              notice(`Uploaded ${uploaded.name}. Select it under Assign a CSV to use it.`);
+              notice(`Uploaded ${uploaded.name}: ${uploaded.report?.issues?.length ?? 0} issues, ${uploaded.report?.missing_slots ?? 0} missing slots. Select it under Assign a CSV to use it.`);
               render();
             } else if (action === "assign")
               await assign(id, panel.querySelector("[data-scenario]").value);
@@ -800,7 +800,7 @@ async function utility() {
     if (!b) return;
     const m = b.playback || {};
     panel.querySelector("[data-meta]").innerHTML =
-      `Reading <strong>${esc(m.scenario_name || "—")}</strong><br>Row ${esc(m.frame_index == null ? "—" : m.frame_index + 1)} of ${esc(m.frame_count ?? "—")} · Time ${esc(Math.floor(m.elapsed_s ?? 0))} s · Loop ${esc((m.loop_count ?? 0) + 1)}`;
+      `Reading <strong>${esc(m.scenario_name || "—")}</strong><br>Frame ${esc(m.frame_index == null ? "—" : m.frame_index + 1)} of ${esc(m.frame_count ?? "—")} · Time ${esc(Math.floor(m.elapsed_s ?? 0))} s · Loop ${esc((m.loop_count ?? 0) + 1)}`;
     const select = panel.querySelector("[data-scenario]");
     if (document.activeElement !== select && m.scenario_id && !drafts.has(b.bus_id))
       select.value = m.scenario_id;

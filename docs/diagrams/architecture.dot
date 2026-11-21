@@ -3,7 +3,7 @@ digraph architecture {
   node [shape=box, style="rounded,filled", fillcolor="white", color="#CBD5E1", penwidth=1.4, fontname="Helvetica", fontsize=13, fontcolor="#142033", margin="0.18,0.13"];
   edge [color="#718096", arrowsize=0.8, fontname="Helvetica", fontsize=11, fontcolor="#475569"];
   files [label="ORIGINAL CSV FILES\nRead only; never edited", shape=note, fillcolor="#E9F1FD"];
-  utility [label="UTILITY SERVER / PARENT - :8000\nDefault: same Normal CSV for every bus\nPer-bus upload / live replacement / timed loop\nTemporary reading injection + bus-port registry\nStarts and stops its bus and city children", fillcolor="#D6F2E9", color="#239B8E", penwidth=2];
+  utility [label="UTILITY SERVER / PARENT - :8000\nDefault: five sustained CONFIG scenarios\nPer-bus upload / live replacement / timed loop\nTemporary reading injection + bus-port registry\nStarts and stops its bus and city children", fillcolor="#D6F2E9", color="#239B8E", penwidth=2];
   buses [label="ONE TCU SERVER PER BUS - :8101 onward\nConsume ordered events; detect and remember alerts\nGenerate and report simulated Edmonton GPS\nPublish position, vehicle state, and battery snapshot", fillcolor="#D6F2E9", color="#239B8E"];
   city [label="CITY SERVER - :8200\nDiscover bus ports; collect their positions/status\nNo second detector; preserve version and freshness", fillcolor="#E1E9F9", color="#5F79AD"];
   driver [label="DRIVER BROWSER - served by its bus\nPriority status / one action / charge / data availability\nExpand only when parked or explicit demo override", fillcolor="#E9F1FD"];

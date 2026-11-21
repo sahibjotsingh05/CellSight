@@ -562,6 +562,24 @@ td {
   padding: 8px 0;
   border-bottom: 1px solid var(--line);
 }
+.file-list details {
+  width: 100%;
+  min-width: 0;
+}
+.file-list summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.file-list summary::before { content: "▸"; }
+.file-list details[open] summary::before { content: "▾"; }
+.file-report {
+  color: var(--secondary);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.file-report p { margin: 6px 0; }
 .file-name {
   flex: 1;
   min-width: 0;
